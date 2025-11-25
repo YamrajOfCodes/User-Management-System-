@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root{
+    background-color: #F6F7F8;
+}
+
+@theme {
+  --color-text: #072635;
+  --color-green: #01F0D0;
+  --color-bermuda: #78dcca;
+  --color-blue: #E0F3FA;
+  --color-orange:#FFE6E9;
+  --color-pink:#FFE6F1
+
+}
+
+.list-item {
+  @apply flex gap-4 justify-center items-center px-4 py-2 rounded-2xl text-[var(--color-text)];
+}
