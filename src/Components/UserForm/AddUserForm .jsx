@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -41,7 +42,10 @@ export default function AddUserForm({onSubmit,onClose}) {
   return (
     <div className="min-h-screen flex fixed w-full top-[0%] items-center justify-center bg-black/40 p-6" onClick={onClose}>
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-semibold mb-2">Create account</h2>
+       <div className="flex justify-between">
+         <h2 className="text-2xl font-semibold mb-2">Create account</h2>
+         <X onClick={onClose} className="hover:cursor-pointer"/>
+       </div>
         <p className="text-sm text-gray-500 mb-6">Please fill the fields — validation is done with Zod.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate onClick={(e)=>{e.stopPropagation()}}>
@@ -135,7 +139,7 @@ export default function AddUserForm({onSubmit,onClose}) {
               Reset
             </button>
 
-            <div className="ml-auto text-sm text-gray-500">All fields are required.</div>
+            <div className="ml-auto text-sm hidden sm:block text-gray-500">All fields are required.</div>
           </div>
         </form>
       </div>
