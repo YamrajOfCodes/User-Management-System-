@@ -16,7 +16,7 @@ const Profile = ({name,userName,userEmail,userCity,userContact}) => {
       className="w-40 h-40 rounded-full flex justify-center text-2xl font-bold items-center overflow-hidden"
       style={{ background: theme.background }}
     >
-      {name?.slice(0, 2).toUpperCase() || "Not Available"}
+      {name?.slice(0, 2).toUpperCase() || "N/A"}
     </div>
   </div>
 

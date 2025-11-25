@@ -10,6 +10,7 @@ import UserCard from './Components/UserCard/UserCard ';
 import AddUserForm from './Components/UserForm/AddUserForm ';
 import { useTheme } from './context/ThemeContext';
 import Loader from './Components/Loader/Loader';
+import { toast } from 'react-toastify';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         name: userData.company
       }
     }));
+      toast.success("User is added");
   };
 
 
@@ -158,6 +160,7 @@ function App() {
   const handleDeleteUser = (id) => {
     console.log(id);
     dispatch(deleteUser(id));
+     toast.success("User is deleted");
   }
 
 
@@ -198,7 +201,7 @@ function App() {
 
   return (
     <>
-      <div style={{ background: theme.background, color: theme.text }}>
+      <div style={{ background: theme.background, color: theme.text }} className='-mt-2'>
 
         {/* Header */}
         <Header handleData={handleSearch} />
@@ -245,7 +248,7 @@ function App() {
                 }} >
                   <div className="headings px-4 flex justify-between">
                     <SectionHeading>Users List</SectionHeading>
-                    <button className='px-4 h-[40px] rounded-xl border cursor-pointer' onClick={() => setShowForm(true)}>Add User</button>
+                    <button className='px-4 h-[30px] rounded-xl border cursor-pointer' onClick={() => setShowForm(true)}>Add User</button>
                   </div>
                   <div className='flex flex-wrap gap-5'>
                     {

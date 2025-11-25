@@ -104,10 +104,10 @@ const UserCard = ({ user, onDelete, handleData }) => {
                 </button>
                 <button
                   onClick={() => {
-                    onDelete(user.id)
                     setOpenDeleteModel(false);
+                    onDelete(user.id)
                   }}
-                  className="bg-red-600 px-2 py-1 cursor-pointer text-white rounded-2xl"
+                  className="bg-red-600 px-2 py-1 hover:cursor-pointer text-white rounded-2xl"
                 >
                   Delete
                 </button>

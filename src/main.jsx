@@ -5,6 +5,8 @@ import App from './App.jsx'
 import {Provider} from "react-redux"
 import store from './Redux/App/store.js'
 import { ThemeProvider } from "./context/ThemeContext";
+import { ToastContainer } from 'react-toastify';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,6 +14,7 @@ createRoot(document.getElementById('root')).render(
       <ThemeProvider>
         <App />
       </ThemeProvider>
+    <ToastContainer/>
     </Provider>
   </StrictMode>,
 )
