@@ -1,16 +1,94 @@
-# React + Vite
+# User Management System – Frontend Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A scalable, production-ready frontend dashboard for managing users. Built with maintainability and long-term growth in mind, featuring robust state management, form handling, and a clean architecture.
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
+- Node.js 16+
+- npm or yarn
 
-## React Compiler
+### Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+git clone <your-repo-url>
+cd your-project-folder
+npm install
+```
 
-## Expanding the ESLint configuration
+### Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+```
+
+## 🏗️ Architecture & Approach
+
+### State Management
+
+I used Redux Toolkit as the main state layer. It keeps things organized and avoids the usual Redux boilerplate.
+
+The store is split into feature-based slices using both:
+- **Standard reducers** for simple updates
+- **Extra reducers** for async logic (API requests, CRUD operations)
+
+This structure makes it easy to add new dashboard modules without reworking everything.
+
+### Form Handling & Validation
+
+**Formik + Zod** combination for robust form management:
+
+- **Formik**: Handles form state, submissions, and field-level logic
+- **Zod**: Provides type-safe validation schemas that are reusable across components
+- **Consistent error handling**: Unified approach to form errors and validation messages
+
+### UI State Management
+
+Every async operation includes proper loading and error states:
+
+- **Loading indicators**: Visual feedback during API calls
+- **Error boundaries**: Graceful error handling with user-friendly messages
+- **No silent failures**: The UI always reflects the actual state of operations
+
+### Theme System
+
+Implements a **Context API-based** theme system for dark/light mode:
+
+- Separated from Redux to keep UI preferences isolated
+- Clean toggle implementation without polluting global state
+- Efficient re-renders only for theme-dependent components
+
+## 💡 Challenges & Learnings
+
+### Theme System with Context API
+
+I'm used to working with Redux, but I haven't had much practical experience using the Context API.
+
+For this project, I used Context specifically for the theme system (dark mode), because stuffing UI theme state into Redux didn't make sense.
+
+At first it was a bit awkward because I'm not as familiar with Context, but building the theme toggling system forced me to actually understand how it works. By the end, it felt a lot more natural, and the theme feature ended up being cleaner than it would've been in Redux.
+
+## 🔧 Tech Stack
+
+- **React** - UI library
+- **Redux Toolkit** - State management
+- **Formik** - Form handling
+- **Zod** - Schema validation
+- **Context API** - Theme management
+
+## 📝 Future Enhancements
+
+- Add unit and integration tests
+- Implement role-based access control
+- Add data export functionality
+- Enhance error logging and monitoring
+
+---
+
+Built with a focus on clean code, scalability, and developer experience.
