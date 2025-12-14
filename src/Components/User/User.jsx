@@ -2,7 +2,7 @@ import React from 'react'
 import moreHorizontal from "../../assets/SVG/more_horizontal.svg"
 import { useTheme } from '../../context/ThemeContext';
 
-const Patient = ({patientName,patientGender,patientAge,profilePicture}) => {
+const Patient = ({userName,userGender}) => {
 
    const { theme } = useTheme();
   
@@ -17,10 +17,10 @@ const Patient = ({patientName,patientGender,patientAge,profilePicture}) => {
         <div className="text-sm leading-tight">
           <h4 className="font-semibold" style={{
             color: theme.color,
-          }}>{patientName}</h4>
+          }}>{userName}</h4>
           <h5 className=" text-xs"style={{
             color: theme.color,
-          }}>{patientGender}</h5>
+          }}>{userGender}</h5>
         </div>
       </div>
     

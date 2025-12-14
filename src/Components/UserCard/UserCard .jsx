@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, Trash2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
-import { AlertTriangle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import DeleteUserModal from '../DeleteUserModel/DeleteUserModal';
 
 const UserCard = ({ user, onDelete, handleData }) => {
   const { theme } = useTheme();
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
-
 
   return (
     <div
@@ -77,43 +76,11 @@ const UserCard = ({ user, onDelete, handleData }) => {
     
       <AnimatePresence>
         {openDeleteModel && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed inset-0 flex items-center justify-center bg-black/50 p-4"
-          >
-            <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm grid gap-4">
-              <div className="flex items-center gap-3">
-                <AlertTriangle className="text-red-600" />
-                <h2 className="text-xl font-semibold">Confirm Deletion</h2>
-              </div>
-
-
-              <p className="text-sm text-gray-600">
-                This action cannot be undone. Are you sure you want to proceed?
-              </p>
-
-
-              <div className="flex justify-between gap-3">
-                <button
-                  onClick={() => setOpenDeleteModel(false)}
-                  className="rounded-2xl cursor-pointer bg-black text-white px-2 py-1"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    setOpenDeleteModel(false);
-                    onDelete(user.id)
-                  }}
-                  className="bg-red-600 px-2 py-1 hover:cursor-pointer text-white rounded-2xl"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </motion.div>
+         <DeleteUserModal 
+         deleteModel={setOpenDeleteModel}
+         onDelete={onDelete}
+         user={user} 
+          />
         )}
       </AnimatePresence>
    </div>

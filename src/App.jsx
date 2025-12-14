@@ -4,7 +4,7 @@ import Header from './Components/Header/Header';
 import User from './Components/User/User';
 import Profile from './Components/Profile/Profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser, deleteUser, getUsersData } from './Redux/Slices/UserSlice';
+import { addUser, deleteUser, getUsersData, updateUser } from './Redux/Slices/UserSlice';
 import SectionHeading from './Components/SectionHeading/SectionHeading ';
 import UserCard from './Components/UserCard/UserCard ';
 import AddUserForm from './Components/UserForm/AddUserForm ';
@@ -20,6 +20,9 @@ function App() {
   const { theme } = useTheme();
 
   const [filterUserData, setFilterUsersData] = useState([]);
+  const [formlabel, setFormLabel] = useState("Add User");
+  const [editingUser, setEditingUser] = useState(null);
+
   const [showForm, setShowForm] = useState(false);
   const { getallusersdata, loader } = useSelector((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,22 +30,39 @@ function App() {
   const totalPages = Math.ceil(filterUserData?.length / usersPerPage);
 
 
-  const handleAddUser = (userData) => {
+  const handleAddUser = (data) => {
     dispatch(addUser({
       id: Date.now(),
-      name: userData.name,
-      username: userData.username,
-      email: userData.email,
-      phone: userData.phone,
-      address: {
-        city: userData.city
-      },
-      company: {
-        name: userData.company
-      }
+      name: data.name,
+      username: data.username,
+      email: data.email,
+      phone: data.contact,
+      address: { city: data.city },
+      company: { name: data.company },
     }));
-      toast.success("User is added");
+
+    toast.success("User added");
+    setShowForm(false);
   };
+
+  const handleUpdateUser = (data) => {
+    console.log(data);
+    
+    dispatch(updateUser({
+      id: editingUser.id,
+      name: data.name,
+      username: data.username,
+      email: data.email,
+      phone: data.contact,
+      address: { city: data.city },
+      company: { name: data.company },
+    }));
+
+    toast.success("User updated");
+    setShowForm(false);
+    setEditingUser(null);
+  };
+
 
 
   const allUsers = getallusersdata?.slice(-4)?.map((element, index) => {
@@ -102,6 +122,12 @@ function App() {
     }
   }
 
+  const handleEdit = (user) => {
+    setEditingUser(user);
+    setFormLabel("Update User");
+    setShowForm(true);
+  };
+
 
 
   // below three related to pagination
@@ -127,32 +153,37 @@ function App() {
   }
 
 
+useEffect(() => {
+  if (!getallusersdata?.length) return;
 
-  useEffect(() => {
+  const randomIndex = Math.floor(Math.random() * getallusersdata.length);
+  const matchUser = getallusersdata[randomIndex];
 
-    const matchPatient = getallusersdata?.find((element) => element.id === 2);
+  const filterusersData = getallusersdata.map((element) => ({
+    id: element.id,
+    Name: element.name,
+    City: element.address?.city,
+    Email: element.email,
+    Company: element.company?.name,
+  }));
 
-    const filterusersData = getallusersdata?.map((element) => ({
-      id: element?.id,
-      Name: element?.name,
-      City: element?.address?.city,
-      Email: element?.email,
-      Company: element?.company?.name
-    }))
+  setFilterUsersData(filterusersData);
 
-    setFilterUsersData(filterusersData)
+  const getData = {
+    id: matchUser.id,
+    Name: matchUser.name,
+    userName: matchUser.username,
+    userEmail: matchUser.email,
+    userPhone: matchUser.phone,
+    userCity: matchUser.address?.city,
+    userCompany: matchUser.company?.name,
+  };
 
-    const getData = {
-      Name: matchPatient?.name,
-      userName: matchPatient?.username,
-      userEmail: matchPatient?.email,
-      userPhone: matchPatient?.phone,
-      userCity: matchPatient?.address?.city,
-    }
+  setUserInfo(getData);
+  setEditingUser(matchUser); 
+}, [getallusersdata]);
 
-    setUserInfo(getData);
 
-  }, [getallusersdata])
 
 
 
@@ -160,28 +191,28 @@ function App() {
   const handleDeleteUser = (id) => {
     console.log(id);
     dispatch(deleteUser(id));
-     toast.success("User is deleted");
+    toast.success("User is deleted");
   }
 
 
   const handleUser = (getname) => {
     setSelectedPatient(getname);
 
-    const matchPatient = getallusersdata?.find((element) => element.name === getname);
+    const matchUser = getallusersdata?.find((element) => element.name === getname);
 
     const getData = {
-      userProfile: matchPatient?.profile_picture,
-      Name: matchPatient?.name,
-      userName: matchPatient?.username,
-      userEmail: matchPatient?.email,
-      userPhone: matchPatient?.phone,
-      userCity: matchPatient?.address?.city,
+      userProfile: matchUser?.profile_picture,
+       id: matchUser.id,
+      Name: matchUser?.name,
+      userName: matchUser?.username,
+      userEmail: matchUser?.email,
+      userPhone: matchUser?.phone,
+      userCity: matchUser?.address?.city,
+      userCompany: matchUser?.company?.name
     }
 
     setUserInfo(getData);
 
-    const patientLabResults = matchPatient?.lab_results || [];
-    setLabResults(patientLabResults);
   }
 
   useEffect(() => {
@@ -211,7 +242,7 @@ function App() {
 
         <section className='h-auto mt-5 w-full flex flex-col  gap-10 px-4 2xl:flex-row mb-2 '>
           <div className="first-wrapper w-full flex flex-col gap-5 md:flex-row ">
-            <div className="patients-list  rounded-2xl h-[70vh] md:h-auto w-full md:w-1/3 xl:w-1/3 2xl:w-1/4  py-4 bg-white " style={{
+            <div className="users-list  rounded-2xl h-[50vh] md:h-auto w-full md:w-1/3 xl:w-1/3 2xl:w-1/4  py-4 bg-white " style={{
               background: theme.background,
               color: theme.color,
             }}>
@@ -219,7 +250,7 @@ function App() {
               <div className="heading">
                 <SectionHeading>Letest Users</SectionHeading>
               </div>
-              <div className="patients mt-5 h-screen flex flex-col gap-5 w-full" >
+              <div className="users mt-5 h-screen flex flex-col gap-5 w-full" >
                 {
                   allUsers?.map((element, index) => {
                     return (
@@ -227,7 +258,10 @@ function App() {
                         background: theme.background,
                         color: theme.color,
                       }}>
-                        <User patientName={element.name} patientGender={element.gender} patientAge={element.age} profilePicture={element.profile_picture} />
+                        <User
+                          userName={element.name}
+                          userGender={element.gender}
+                        />
                       </div>
                     )
                   })
@@ -238,17 +272,20 @@ function App() {
 
 
 
-              {/* Users List Section */}
+            {/* Users List Section */}
 
-            <div className="patient-health-details  md:w-2/3  xl:w-full  px-2 gap-10 flex flex-col 2xl:flex-row" >
-              <div className="patient-health-wrapper py-1 2xl:w-11/12">
+            <div className="users-details  md:w-2/3  xl:w-full  px-2 gap-10 flex flex-col 2xl:flex-row" >
+              <div className="user-wrapper py-1 2xl:w-11/12">
                 <div className="wrapper h-auto rounded-md py-4 px-6 full" style={{
                   background: theme.background,
                   color: theme.color,
                 }} >
                   <div className="headings px-4 flex justify-between">
                     <SectionHeading>Users List</SectionHeading>
-                    <button className='px-4 h-[30px] rounded-xl border cursor-pointer' onClick={() => setShowForm(true)}>Add User</button>
+                    <button className='px-4 h-[30px] rounded-xl border cursor-pointer' onClick={() => {
+                      setShowForm(true),
+                        setFormLabel("Create User")
+                    }}>Add User</button>
                   </div>
                   <div className='flex flex-wrap gap-5'>
                     {
@@ -284,8 +321,8 @@ function App() {
                                 key={i}
                                 onClick={() => goToPage(pageNum)}
                                 className={`px-3 py-1 rounded-md border text-sm cursor-pointer ${currentPage === pageNum
-                                    ? "bg-blue-500 text-white"
-                                    : "hover:bg-gray-300 hover:text-black"
+                                  ? "bg-blue-500 text-white"
+                                  : "hover:bg-gray-300 hover:text-black"
                                   }`}
                               >
                                 {pageNum}
@@ -308,24 +345,23 @@ function App() {
 
                   </div>
                 </div>
-
-
               </div >
 
 
+              {/*  View Profile Section */}
 
 
-               {/*  View Profile Section */}
-
-
-              <div className="patient-personal-details w-full  flex flex-col gap-4 xl:flex-row 2xl:w-1/3 2xl:flex-col mt-10 xl:mt-0">
-                <div className="details w-full h-auto px-1 py-2 xl:w-1/2 2xl:w-full">
+              <div className="user-personal-details w-full   flex flex-col gap-4 xl:flex-row 2xl:w-1/3 2xl:flex-col mt-10 xl:mt-0">
+                <div className="details w-full h-auto px-1 py-2 2xl:w-full">
                   <Profile
                     name={userInfo.Name}
                     userName={userInfo.userName}
                     userEmail={userInfo.userEmail}
                     userCity={userInfo.userCity}
                     userContact={userInfo.userPhone}
+                    showEditForm={setShowForm}
+                    setFormLabel={setFormLabel}
+                    onEdit={() => handleEdit(userInfo)}
                   />
                 </div>
               </div>
@@ -339,10 +375,16 @@ function App() {
 
       {showForm && (
         <AddUserForm
-          onSubmit={handleAddUser}
-          onClose={() => setShowForm(false)}
+          onSubmit={editingUser ? handleUpdateUser : handleAddUser}
+          onClose={() => {
+            setShowForm(false);
+            setEditingUser(null);
+          }}
+          formLabel={formlabel}
+          initialValues={editingUser}
         />
       )}
+
 
     </>
   )

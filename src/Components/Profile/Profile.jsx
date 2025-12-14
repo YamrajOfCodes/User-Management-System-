@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {  Mail,Phone,Building, User  } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import AddUserForm from '../UserForm/AddUserForm ';
 
-const Profile = ({name,userName,userEmail,userCity,userContact}) => {
+const Profile = ({name,userName,userEmail,userCity,userContact,showEditForm,onEdit}) => {
 
    const { theme } = useTheme();
 
   return (
+<>
      <div
   className="rounded-3xl shadow-lg w-full p-8"
   style={{ background: theme.card, color: theme.text }}
 >
-  <div className="flex justify-center mb-6">
+  <div className="flex  justify-center mb-6">
     <div
       className="w-40 h-40 rounded-full flex justify-center text-2xl font-bold items-center overflow-hidden"
       style={{ background: theme.background }}
@@ -25,7 +27,7 @@ const Profile = ({name,userName,userEmail,userCity,userContact}) => {
   </h1>
 
   <div className="space-y-6 mb-8">
-    <div className="flex items-start gap-4">
+    <div className="flex  items-start gap-4">
       <div
         className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
         style={{ background: theme.background }}
@@ -84,10 +86,12 @@ const Profile = ({name,userName,userEmail,userCity,userContact}) => {
       background: theme.primary,
       color: "#fff"
     }}
+   onClick={onEdit}
   >
-  Full Profile View not Available
+  Update User Information
   </button>
 </div>
+</>
 
    
   )
