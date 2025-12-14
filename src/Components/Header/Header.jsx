@@ -47,7 +47,7 @@ const Header = ({ handleData }) => {
       >
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center shrink-0">
-           <h4 className="text-md font-bold md:text-3xl">TechX Solutions</h4>
+           <h4 className="text-md font-bold md:text-3xl">Admin Dashboard</h4>
           </div>
 
           <div className="hidden xl:flex flex-1 justify-center">
